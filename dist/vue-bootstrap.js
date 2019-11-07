@@ -2112,11 +2112,12 @@
                                 'class': _this.formCheck ? 'form-check-input' : '',
                                 attrs: { type: _this.type,
                                     name: _this.id,
-                                    id: option.id
+                                    id: option.id,
+
+                                    checkbox: _this.formCheck ? _this.value.includes(option.value) : option.value === _this.value
                                 },
                                 domProps: {
-                                    'value': option.value,
-                                    'checked': _this.formCheck ? _this.value.includes(option.value) : option.value === _this.value
+                                    'value': option.value
                                 }
                             }), option.text]
                         )]
