@@ -1,5 +1,5 @@
 /* @jsx h */
-import { BUTTON_VARIANTS, SIZES } from './misc/constants'
+import { BUTTON_VARIANTS, SIZES } from './misc/constants'
 import { inEnum } from './misc/validators'
 
 import Btn from './Btn'
@@ -35,7 +35,7 @@ export default {
         }
     },
     computed: {
-        className() {
+        className() {
             return {
                 'btn-group': true,
                 dropup: this.dropup
@@ -48,42 +48,39 @@ export default {
     },
     methods: {
         _renderSplitted() {
-            const h = this.$createElement
             return [
-                <Btn
-                    on-click={this.btnClick}
-                    variant={this.variant}
-                    size={this.size}>
-                    { this.$slots.default }
-                    { this.text }
+                <Btn on-click={this.btnClick} variant={this.variant} size={this.size}>
+                    {this.$slots.default}
+                    {this.text}
                 </Btn>,
                 this._renderButton(this.toggle, <span class="sr-only">Toggle Dropdown</span>)
             ]
         },
         _renderButton(event, children) {
-            const h = this.$createElement
-
-            return <Btn
-                on-click={event}
-                class="dropdown-toggle"
-                aria-haspopup="true"
-                aria-expanded={this.visibility}
-                active={this.visibility}
-                variant={this.variant}
-                size={this.size}>
-                { children }
-            </Btn>
+            return (
+                <Btn
+                    on-click={event}
+                    class="dropdown-toggle"
+                    aria-haspopup="true"
+                    aria-expanded={this.visibility}
+                    active={this.visibility}
+                    variant={this.variant}
+                    size={this.size}
+                >
+                    {children}
+                </Btn>
+            )
         },
         _renderDropdownMenu() {
-            const h = this.$createElement
-
-            return <DropdownMenu
-                ref="dropdown"
-                on-show={this._show}
-                on-hide={this._hide}
-                options={this.options}
-                title={this.title}>
-            </DropdownMenu>
+            return (
+                <DropdownMenu
+                    ref="dropdown"
+                    on-show={this._show}
+                    on-hide={this._hide}
+                    options={this.options}
+                    title={this.title}
+                ></DropdownMenu>
+            )
         },
         btnClick() {
             // when splitted do the action in it
@@ -109,11 +106,12 @@ export default {
         const children = [this._renderDropdownMenu()]
 
         if (this.split) children.unshift(...this._renderSplitted())
-
         else children.unshift(this._renderButton(this.btnClick, [this.$slots.default, this.text]))
 
-        return <div role="group" class={this.className}>
-            { children }
-        </div>
+        return (
+            <div role="group" class={this.className}>
+                {children}
+            </div>
+        )
     }
 }

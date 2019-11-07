@@ -1,4 +1,4 @@
-import { calculatePosition } from './misc/utilities'
+import { calculatePosition } from './misc/utilities'
 
 export default {
     name: 'popover',
@@ -20,18 +20,18 @@ export default {
             type: Boolean,
             default: false
         },
-        position: {
+        position: {
             type: String,
             default: 'top'
         }
     },
-    data() {
+    data() {
         return {
             visible: false
         }
     },
     computed: {
-        className() {
+        className() {
             return {
                 in: true,
                 fade: true,
@@ -40,7 +40,7 @@ export default {
             }
         }
     },
-    created() {
+    created() {
         this.visible = this.show
     },
     methods: {
@@ -55,7 +55,7 @@ export default {
 
             delete this._modal
         },
-        _injectPopover() {
+        _injectPopover() {
             if (this.$isServer || this._modal) return
 
             const ctx = this
@@ -67,31 +67,28 @@ export default {
             document.body.appendChild(_modal_el)
 
             this._modal = new Vue({
-                el:'#modal',
-                render: (h) => ctx._renderEl()
+                el: '#modal',
+                render: h => ctx._renderEl()
             })
         },
-        _renderPopover() {
-            const h = this.$createElement
-
+        _renderPopover() {
             const style = {
                 top: 'auto',
                 left: 'auto'
             }
 
-            return <transition name="fade">
-                {
-                    this.visible && <div
-                        class={this.className}
-                        style={style}
-                        role="tooltip">
-                        <div class="popover-arrow"></div>
-                        { this.title && <h3 class="popover-title">{ this.title }</h3> }
+            return (
+                <transition name="fade">
+                    {this.visible && (
+                        <div class={this.className} style={style} role="tooltip">
+                            <div class="popover-arrow"></div>
+                            {this.title && <h3 class="popover-title">{this.title}</h3>}
 
-                        <div class="popover-content">{ this.$slots.default }</div>
-                    </div>
-                }
-            </transition>
+                            <div class="popover-content">{this.$slots.default}</div>
+                        </div>
+                    )}
+                </transition>
+            )
         }
     },
     render(h) {
@@ -99,18 +96,22 @@ export default {
 
         switch (this.event) {
             case 'click':
-                on.click = (ev) => {
+                on.click = ev => {
                     ev.preventDefault()
                     this.visible = !this.visible
                 }
-            break
+                break
             case 'hover':
-                on.mouseenter = () => this.visible = true
-                on.mouseleave = () => this.visible = false
-                on.click = (ev) => ev.preventDefault()
-            break
+                on.mouseenter = () => (this.visible = true)
+                on.mouseleave = () => (this.visible = false)
+                on.click = ev => ev.preventDefault()
+                break
         }
 
-        return <a href="#" { ...{ on } }>{ this.$slots.target || this.target }</a>
+        return (
+            <a href="#" {...{ on }}>
+                {this.$slots.target || this.target}
+            </a>
+        )
     }
 }

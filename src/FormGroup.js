@@ -22,10 +22,12 @@ export default {
     },
     computed: {
         formCheck() {
-            switch (this.type) {
+            switch (this.type) {
                 case 'radio':
-                case 'checkbox': return true
-                default: return false
+                case 'checkbox':
+                    return true
+                default:
+                    return false
             }
         },
         className() {
@@ -39,26 +41,22 @@ export default {
         _renderElement() {
             // define witch input
             switch (this.type) {
-                case 'slot': return this.$slots.default
+                case 'slot':
+                    return this.$slots.default
                 case 'radio':
-                case 'checkbox': return this._renderRadioCheck()
-                default: return this._renderFormControl()
+                case 'checkbox':
+                    return this._renderRadioCheck()
+                default:
+                    return this._renderFormControl()
             }
         },
-        _renderRowElement() {
-            const h = this.$createElement
-
-            return <div class={colsClass(this.row)}>
-                { this._renderElement() }
-            </div>
+        _renderRowElement() {
+            return <div class={colsClass(this.row)}>{this._renderElement()}</div>
         },
         _renderFormControl() {
-            const h = this.$createElement
-
             const props = {}
             for (let propName in FormControl.props)
-                if (FormControl.props.hasOwnProperty(propName))
-                    props[propName] = this[propName]
+                if (FormControl.props.hasOwnProperty(propName)) props[propName] = this[propName]
 
             const on = {
                 input: this._updateValue,
@@ -72,14 +70,13 @@ export default {
                 select: emitEvent('select', this)
             }
 
-            return <FormControl { ...{ on, props } } />
+            return <FormControl {...{ on, props }} />
         },
         _renderTitle() {
-            const h = this.$createElement
-
             switch (this.type) {
                 case 'radio':
-                case 'checkbox': return <legend>{ this.title }</legend>
+                case 'checkbox':
+                    return <legend>{this.title}</legend>
                 default:
                     let className = []
 
@@ -87,24 +84,18 @@ export default {
 
                     return (
                         <label class={className} for={this.id}>
-                            { this.title }
+                            {this.title}
                         </label>
                     )
             }
         },
         _renderNote() {
-            const h = this.$createElement
-
-            return <small class='text-muted'>
-                { this.note }
-            </small>
+            return <small class="text-muted">{this.note}</small>
         },
         _renderRadioCheck() {
-            const h = this.$createElement
-
             const emitClick = emitEvent('click', this)
-            const onClick = (ev) => {
-                let { value } = ev.target
+            const onClick = ev => {
+                let { value } = ev.target
 
                 if (this.formCheck) {
                     const copy = this.value.slice()
@@ -112,7 +103,6 @@ export default {
 
                     if (pos > -1) {
                         copy.splice(pos, 1)
-
                     } else {
                         copy.push(value)
                     }
@@ -126,7 +116,7 @@ export default {
                 })
             }
 
-            return this.options.map((option) => (
+            return this.options.map(option => (
                 <div class={this._radioCheckClass(option)}>
                     <label class={this.formCheck ? 'form-check-label' : ''}>
                         <input
@@ -136,9 +126,14 @@ export default {
                             name={this.id}
                             id={option.id}
                             value={option.value}
-                            checkbox={this.formCheck ? this.value.includes(option.value) : (option.value === this.value)} />
+                            checked={
+                                this.formCheck
+                                    ? this.value.includes(option.value)
+                                    : option.value === this.value
+                            }
+                        />
 
-                        { option.text }
+                        {option.text}
                     </label>
                 </div>
             ))
@@ -152,7 +147,7 @@ export default {
                 disabled: option.disabled
             }
         },
-        _updateValue(value) {
+        _updateValue(value) {
             if (this.value === value) {
                 return
             }
@@ -160,16 +155,20 @@ export default {
             this.$emit('input', value)
         }
     },
-    render(h) {
+    render(h) {
         // return generated element
-        return <fieldset class={this.className}>
-            { this.title && this._renderTitle() }
+        return (
+            <fieldset class={this.className}>
+                {this.title && this._renderTitle()}
 
-            { this.row ? this._renderRowElement() : this._renderElement() }
+                {this.row ? this._renderRowElement() : this._renderElement()}
 
-            { this.status && this.statusMessage && <div class="form-control-feedback">{ this.statusMessage }</div> }
+                {this.status && this.statusMessage && (
+                    <div class="form-control-feedback">{this.statusMessage}</div>
+                )}
 
-            { this.note && this._renderNote() }
-        </fieldset>
+                {this.note && this._renderNote()}
+            </fieldset>
+        )
     }
 }

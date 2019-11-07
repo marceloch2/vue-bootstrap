@@ -7,7 +7,7 @@ export default {
         id: String,
         placeholder: String,
         multiple: {
-            type: Boolean,
+            type: Boolean,
             default: false
         },
         options: {
@@ -41,74 +41,82 @@ export default {
             }
         }
     },
-    methods: {
-        _updateAndEmit(eventName) {
-            return (ev) => {
+    methods: {
+        _updateAndEmit(eventName) {
+            return ev => {
                 emitEvent(eventName, this)()
                 this._updateValue(ev)
             }
         },
-        _renderStatic() {
-            const h = this.$createElement
-
-            return <p on-click={emitEvent('click', this)} class={this.className}>{ this.placeholder }</p>
+        _renderStatic() {
+            return (
+                <p on-click={emitEvent('click', this)} class={this.className}>
+                    {this.placeholder}
+                </p>
+            )
         },
         _renderInput() {
-            const h = this.$createElement
-
-            return <input
-                class={this.className}
-                on-click={this._updateAndEmit('click')}
-                on-blur={this._updateAndEmit('blur')}
-                on-focus={this._updateAndEmit('focus')}
-                on-keydown={this._updateAndEmit('keydown')}
-                on-keypress={this._updateAndEmit('keypress')}
-                on-keyup={this._updateAndEmit('keyup')}
-                type={this.type}
-                id={this.id}
-                name={this.id}
-                value={this.value}
-                placeholder={this.placeholder} />
+            return (
+                <input
+                    class={this.className}
+                    on-click={this._updateAndEmit('click')}
+                    on-blur={this._updateAndEmit('blur')}
+                    on-focus={this._updateAndEmit('focus')}
+                    on-keydown={this._updateAndEmit('keydown')}
+                    on-keypress={this._updateAndEmit('keypress')}
+                    on-keyup={this._updateAndEmit('keyup')}
+                    type={this.type}
+                    id={this.id}
+                    name={this.id}
+                    value={this.value}
+                    placeholder={this.placeholder}
+                />
+            )
         },
         _renderSelect() {
-            const h = this.$createElement
+            const options = this.options || []
 
-            const options = this.options || [];
-
-            return <select
-                on-click={this._updateAndEmit('click')}
-                on-change={this._updateAndEmit('change')}
-                on-select={this._updateAndEmit('select')}
-                id={this.id}
-                name={this.id}
-                class={this.className}
-                multiple={this.multiple}>
-
-                { options.map(this._renderOption) }
-            </select>
+            return (
+                <select
+                    on-click={this._updateAndEmit('click')}
+                    on-change={this._updateAndEmit('change')}
+                    on-select={this._updateAndEmit('select')}
+                    id={this.id}
+                    name={this.id}
+                    class={this.className}
+                    multiple={this.multiple}
+                >
+                    {options.map(this._renderOption)}
+                </select>
+            )
         },
-        _renderOption({text, value}) {
-            const h = this.$createElement
-
-            return <option selected={value === this.value} on-click={this._updateAndEmit('click')} value={value}>{ text }</option>
+        _renderOption({ text, value }) {
+            return (
+                <option
+                    selected={value === this.value}
+                    on-click={this._updateAndEmit('click')}
+                    value={value}
+                >
+                    {text}
+                </option>
+            )
         },
-        _renderTextarea() {
-            const h = this.$createElement
-
-            return <textarea
-                on-click={this._updateAndEmit('click')}
-                on-blur={this._updateAndEmit('blur')}
-                on-focus={this._updateAndEmit('focus')}
-                on-keydown={this._updateAndEmit('keydown')}
-                on-keypress={this._updateAndEmit('keypress')}
-                on-keyup={this._updateAndEmit('keyup')}
-                id={this.id}
-                name={this.id}
-                class={this.className}>
-
-            </textarea>
+        _renderTextarea() {
+            return (
+                <textarea
+                    on-click={this._updateAndEmit('click')}
+                    on-blur={this._updateAndEmit('blur')}
+                    on-focus={this._updateAndEmit('focus')}
+                    on-keydown={this._updateAndEmit('keydown')}
+                    on-keypress={this._updateAndEmit('keypress')}
+                    on-keyup={this._updateAndEmit('keyup')}
+                    id={this.id}
+                    name={this.id}
+                    class={this.className}
+                ></textarea>
+            )
         },
-        _updateValue({ target }) {
+        _updateValue({ target }) {
             if (this.value === target.value) return
 
             const value = target.value
@@ -118,11 +126,16 @@ export default {
     render(h) {
         // define witch input
         switch (this.type) {
-            case 'slot': return this.$slots.default
-            case 'static': return this._renderStatic()
-            case 'textarea': return this._renderTextarea()
-            case 'select': return this._renderSelect()
-            default: return this._renderInput()
+            case 'slot':
+                return this.$slots.default
+            case 'static':
+                return this._renderStatic()
+            case 'textarea':
+                return this._renderTextarea()
+            case 'select':
+                return this._renderSelect()
+            default:
+                return this._renderInput()
         }
     }
 }

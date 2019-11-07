@@ -9,24 +9,23 @@ export default {
     },
     methods: {
         _emitClick(ev) {
-            const { page } = ev.target.dataset
+            const { page } = ev.target.dataset
             ev.preventDefault()
             this.$emit('input', parseInt(page))
         },
         _renderLink() {
-            const h = this.$createElement
             const children = []
 
             for (let i = 1, len = this.pages; i <= len; i++) {
                 const className = {
                     'page-item': true,
-                    'active': this.value === i
+                    active: this.value === i
                 }
 
                 children.push(
                     <li class={className}>
                         <a href="#" class="page-link" data-page={i} on-click={this._emitClick}>
-                            { i }
+                            {i}
                         </a>
                     </li>
                 )
@@ -35,9 +34,7 @@ export default {
             return children
         }
     },
-    render(h) {
-        return <ul class="pagination">
-            { this._renderLink() }
-        </ul>
+    render(h) {
+        return <ul class="pagination">{this._renderLink()}</ul>
     }
 }
